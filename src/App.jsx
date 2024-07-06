@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { Suspense, lazy,useState } from 'react'
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import './App.css'
-import Home from './components/home'
-import Dashboard from './components/dashboard'
+const Home = lazy(()=>import('./components/home'));
+const Dashboard = lazy(()=>import('./components/dashboard'));
+
 
 
 function App() {
@@ -10,19 +11,19 @@ function App() {
   const navigate = useNavigate();
 
   return (
-    <>
+    <>  
+      <div>
       <button onClick={()=>{navigate("/Dashboard")}} >
         Dashboard
       </button>
       <button onClick={()=>{navigate("/")}} >
         Home
       </button>
-      <BrowserRouter>
         <Routes>
-          <Route path="/Dashboard" element={<Dashboard />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/Dashboard" element={<Suspense fallback="Loading..."><Dashboard /></Suspense>} />
+          <Route path="/" element={<Suspense fallback="Loading..."><Home /></Suspense>} />
         </Routes>
-      </BrowserRouter>
+        </div>
     </>
   )
 }
